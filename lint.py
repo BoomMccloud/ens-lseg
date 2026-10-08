@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that the LSEG deck uses slide 2's panel text scale.
+"""Check the LSEG deck's shared text scale and header wordmark size.
 
 Run with ``python3 lint.py``. An optional HTML path makes it possible
 to check a draft without replacing the deck.
@@ -101,6 +101,7 @@ def main() -> int:
     errors = []
     for width in (1024, 390):
         expected = EXPECTED | {selector: "16px" if width == 390 else "15px" for selector in INPUTS}
+        expected[".brand-lseg"] = "19px" if width == 390 else "23px"
         actual = {}
         for media_width, selectors, size in rules:
             if media_width is None or width <= media_width:
@@ -117,7 +118,7 @@ def main() -> int:
         for error in errors:
             print(f"FAIL: {error}", file=sys.stderr)
         return 1
-    print(f"LSEG typography lint passed at desktop and mobile widths ({len(EXPECTED) + len(INPUTS)} selectors).")
+    print(f"LSEG typography lint passed at desktop and mobile widths ({len(EXPECTED) + len(INPUTS) + 1} selectors).")
     return 0
 
 
