@@ -95,28 +95,27 @@ body{font-family:"SF Pro Text","Avenir Next","Helvetica Neue",Arial,sans-serif;-
 }
 .cover-slide{background:#cce4ed;padding:clamp(32px,5vh,64px) clamp(24px,6vw,88px)}
 .cover-slide.active{display:flex;align-items:safe center;justify-content:center}
-.cover-layout{width:min(1180px,100%);margin:0 auto}
-.cover-brand{display:flex;align-items:center;gap:clamp(20px,3.5vw,48px);margin-bottom:clamp(28px,4vh,42px)}
+.cover-layout{width:min(1180px,100%);margin:0 auto;text-align:center}
+.cover-brand{display:flex;align-items:center;justify-content:center;gap:clamp(20px,3.5vw,48px);margin-bottom:clamp(34px,5vh,56px)}
 .cover-ens-logo{display:block;width:clamp(190px,21vw,305px);height:auto}
 .cover-cross{color:#4b899e;font-size:clamp(42px,5vw,72px);font-weight:300;line-height:1}
 .cover-lseg-logo{color:#082735;font-family:"Avenir Next","Helvetica Neue",Arial,sans-serif;font-size:clamp(62px,7vw,102px);font-weight:750;letter-spacing:-.075em;line-height:1}
-.cover-layout h1{max-width:1050px;margin:0;color:#0c688e;font-size:clamp(40px,4.3vw,64px);font-weight:700;letter-spacing:-.055em;line-height:1.04}
-.problem-list{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0}
-.cover-slide .problem-list{margin-top:32px}
-.problem-item{min-height:170px;padding:21px 23px;background:#fff;border-top:4px solid #258db8;color:#244653;font-size:16px;line-height:1.4}
-.problem-item strong{display:block;margin-bottom:11px;color:#0c688e;font-size:19px;line-height:1.2}
+.cover-layout h1{max-width:1000px;margin:0 auto;color:#0c688e;font-size:clamp(48px,5.8vw,82px);font-weight:700;letter-spacing:-.055em;line-height:1.04}
+.problem-list{list-style:none;display:grid;grid-template-columns:1fr;gap:0;margin:0;padding:0}
+.problem-item{padding:17px 3px;border-bottom:1px solid #dce7eb;color:#244653;font-size:16px;line-height:1.4}
+.problem-item:last-child{border-bottom:0}
+.problem-item strong{display:block;margin-bottom:6px;color:#0c688e;font-size:19px;line-height:1.2}
 .on-cover .top{display:none}
 .on-cover .deck{top:0}
 @media(max-width:820px){
-  .cover-slide,.cover-slide.active{display:block;background:#cce4ed;padding:32px 24px 38px}
+  .cover-slide,.cover-slide.active{background:#cce4ed;padding:32px 24px 38px}
+  .cover-slide.active{display:flex;align-items:safe center!important;justify-content:center!important}
   .cover-brand{gap:22px;margin-bottom:28px}
   .cover-ens-logo{width:clamp(150px,26vw,215px)}
   .cover-lseg-logo{font-size:clamp(51px,9vw,76px)}
   .cover-cross{font-size:44px}
   .cover-layout h1{font-size:clamp(36px,5.4vw,48px)}
-  .problem-list{grid-template-columns:1fr;gap:10px}
-  .cover-slide .problem-list{margin-top:25px}
-  .problem-item{min-height:0;padding:16px 18px}
+  .problem-item{padding:16px 2px}
   .problem-item strong{margin-bottom:5px}
 }
 @media(max-width:480px){
@@ -133,9 +132,12 @@ body{font-family:"SF Pro Text","Avenir Next","Helvetica Neue",Arial,sans-serif;-
 <body class="on-cover">
 <header class="top"><div class="brand"><img class="ens-logo" src="assets/ens-logo.svg" alt="ENS"><span class="brand-divider"></span><span class="brand-lseg">LSEG</span></div><div class="topnote">Concept demo</div></header>
 <main class="deck" id="deck" aria-live="polite">
-  <section class="slide cover-slide active" aria-label="The tokenized asset identity problem">
-    <div class="cover-layout"><div class="cover-brand" aria-label="ENS and LSEG"><img class="cover-ens-logo" src="assets/ens-logo.svg" alt="ENS"><span class="cover-cross" aria-hidden="true">×</span><span class="cover-lseg-logo" role="img" aria-label="LSEG">LSEG</span></div><h1>As digital assets move onchain, there are core attributes that need to be maintained during the tokenization process:</h1>
-    <ul class="problem-list"><li class="problem-item"><strong>Provenance:</strong> How can an issuer keep a record of where the asset is generated, by which issuing body?</li><li class="problem-item"><strong>Discoverability:</strong> Can we find the legitimate, compliant version of an asset onchain?</li><li class="problem-item"><strong>Compliance:</strong> Does the taxonomy system include essential identifiers required by local regulations?</li></ul></div>
+  <section class="slide cover-slide active" aria-label="Creating a tokenized asset registry system">
+    <div class="cover-layout"><div class="cover-brand" aria-label="LSEG and ENS"><span class="cover-lseg-logo" role="img" aria-label="LSEG">LSEG</span><span class="cover-cross" aria-hidden="true">×</span><img class="cover-ens-logo" src="assets/ens-logo.svg" alt="ENS"></div><h1>Creating a tokenized asset registry system</h1></div>
+  </section>
+  <section class="slide" aria-label="The tokenized asset identity problem">
+    <div class="layout"><div class="copy"><h1>As digital assets move onchain, there are core attributes that need to be maintained during the tokenization process:</h1></div>
+    <div class="panel problem-panel"><div class="panel-body"><ul class="problem-list"><li class="problem-item"><strong>Provenance:</strong> How can an issuer keep a record of where the asset is generated, by which issuing body?</li><li class="problem-item"><strong>Discoverability:</strong> Can we find the legitimate, compliant version of an asset onchain?</li><li class="problem-item"><strong>Compliance:</strong> Does the taxonomy system include essential identifiers required by local regulations?</li></ul></div></div></div>
   </section>
   <section class="slide" aria-label="A credible name for each asset">
     <div class="layout"><div class="copy"><h1>As assets move onchain, there needs to be a credible way to prove provenance.</h1><p>ENS provides LSEG a credible name for each tokenized asset that moves onchain. One name corresponds with each asset, across any blockchain network.</p></div>
@@ -158,7 +160,7 @@ body{font-family:"SF Pro Text","Avenir Next","Helvetica Neue",Arial,sans-serif;-
     <div class="panel"><div class="panel-head"><span>Token picker</span></div><div class="panel-body"><div class="picker"><div class="picker-top"><b>Choose an asset</b><span class="eyelabel">Ethereum</span></div><div style="padding:0 13px 10px"><input class="searchinput" id="pickerSearch" aria-label="Search tokens" placeholder="Search token or issuer"></div><div id="pickerList"></div></div><button class="action secondary" id="addNewAsset" style="margin-top:12px">＋ Add sample RWA</button></div></div></div>
   </section>
 </main>
-<footer class="nav"><button class="prev" id="prev" aria-label="Previous page">← Back</button><div class="navcenter"><div class="progress" id="progress" aria-label="Page navigation"></div><span class="counter" id="counter">01 / 06</span></div><button class="next" id="next" aria-label="Next page">Next →</button></footer>
+<footer class="nav"><button class="prev" id="prev" aria-label="Previous page">← Back</button><div class="navcenter"><div class="progress" id="progress" aria-label="Page navigation"></div><span class="counter" id="counter">01 / 07</span></div><button class="next" id="next" aria-label="Next page">Next →</button></footer>
 <script>
 const demoAssets=[
  {name:'Acme Fund',short:'Acme Fund',ticker:'ACME',type:'Equity fund',ens:'acmefund.lseg.com',isin:'GB00BQ7X4K21',lei:'213800ACMEFUND00X421',dti:'4H95J0R2X',country:'United Kingdom',addresses:{Ethereum:'0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f',Solana:'7xKp4mQ9sVn2eRt6aBc3DgFhJkLmNwYp8qRsTuVmQ9s',Stellar:'GDX4KQ2M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W2LM'}},
@@ -171,7 +173,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 function addressRows(asset){return ['Ethereum','Solana','Stellar'].map(chain=>`<div class="address-row"><strong>${chain}</strong><code>${esc(asset.addresses[chain]||'Not listed')}</code></div>`).join('')}
 function factRows(asset,includeName=false){const facts=[['ISIN',asset.isin],['LEI',asset.lei],['DTI',asset.dti],['Issuer country',asset.country],['Ticker',asset.ticker]];if(includeName)facts.push(['Name',asset.ens]);return facts.map(([k,v])=>`<div class="fact"><span>${esc(k)}</span><b>${esc(v||'—')}</b></div>`).join('')}
 function renderProfile(){document.getElementById('assetMark').textContent=selectedAsset.ticker.slice(0,1);document.getElementById('profileName').textContent=selectedAsset.name;document.getElementById('profileSub').textContent=`${selectedAsset.ticker} · ${selectedAsset.type}`;document.getElementById('profileChains').innerHTML=addressRows(selectedAsset);document.getElementById('profileFacts').innerHTML=factRows(selectedAsset,true)}
-function renderAssetList(){const list=document.getElementById('assetList');list.innerHTML=allAssets().map((a,i)=>`<div class="asset-item"><button data-asset-index="${i}"><b>${esc(a.name)}</b><small>${esc(a.ens)} · ${esc(a.ticker)}</small></button><span class="pill">Listed</span></div>`).join('');list.querySelectorAll('[data-asset-index]').forEach(b=>b.onclick=()=>{selectedAsset=allAssets()[Number(b.dataset.assetIndex)];renderProfile();go(3)});document.getElementById('assetCount').textContent=`${allAssets().length} ${allAssets().length===1?'asset':'assets'}`}
+function renderAssetList(){const list=document.getElementById('assetList');list.innerHTML=allAssets().map((a,i)=>`<div class="asset-item"><button data-asset-index="${i}"><b>${esc(a.name)}</b><small>${esc(a.ens)} · ${esc(a.ticker)}</small></button><span class="pill">Listed</span></div>`).join('');list.querySelectorAll('[data-asset-index]').forEach(b=>b.onclick=()=>{selectedAsset=allAssets()[Number(b.dataset.assetIndex)];renderProfile();go(4)});document.getElementById('assetCount').textContent=`${allAssets().length} ${allAssets().length===1?'asset':'assets'}`}
 function renderLookup(){const name=document.getElementById('lookupInput').value.trim().toLowerCase();const asset=allAssets().find(a=>a.ens.toLowerCase()===name);const box=document.getElementById('lookupResult');if(!asset){box.innerHTML=`<div class="result-content"><b>No demo listing found for “${esc(name||'') }”.</b><div class="subline">Try a name shown in the registry, such as acmefund.lseg.com.</div></div>`;return}box.innerHTML=`<div class="result-head"><div class="result-identity"><b>${esc(asset.name)}</b><small>${esc(asset.ens)} · Demo registry listing</small></div><span class="verification" aria-label="Listed in demo registry">Listed in demo</span></div><div class="result-content"><div class="eyelabel section-label">Token addresses</div><div class="address-list">${addressRows(asset)}</div><div class="eyelabel section-label">Identifiers</div><div class="facts">${factRows(asset)}</div></div>`}
 function renderPicker(){const q=document.getElementById('pickerSearch').value.trim().toLowerCase();const assets=allAssets().filter(a=>`${a.name} ${a.ticker} ${a.ens}`.toLowerCase().includes(q));const list=document.getElementById('pickerList');list.innerHTML=assets.length?assets.map(a=>`<button class="picker-row" data-name="${esc(a.ens)}"><span class="token-icon">${esc(a.ticker.slice(0,1))}</span><span><strong>${esc(a.name)}</strong><small>${esc(a.ens)} · ${esc(a.addresses.Ethereum.slice(0,10))}…</small></span><span class="source-tag">Demo</span></button>`).join(''):`<div class="micro" style="padding:14px">No matching assets in this demo.</div>`;list.querySelectorAll('.picker-row').forEach(b=>b.onclick=()=>{list.querySelectorAll('.picker-row').forEach(row=>row.classList.remove('selected'));b.classList.add('selected')})}
 function parseCsv(text){const rows=[];let row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const ch=text[i];if(quoted){if(ch==='"'&&text[i+1]==='"'){field+='"';i++}else if(ch==='"')quoted=false;else field+=ch}else if(ch==='"')quoted=true;else if(ch===','){row.push(field);field=''}else if(ch==='\n'){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()))rows.push(row);row=[];field=''}else field+=ch}if(field||row.length){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()))rows.push(row)}if(rows.length<2)return[];const headers=rows[0].map(h=>h.trim().toLowerCase().replace(/[^a-z0-9]+/g,'_'));return rows.slice(1).map(cells=>{const d=Object.fromEntries(headers.map((h,i)=>[h,(cells[i]||'').trim()]));const get=(...keys)=>keys.map(k=>d[k]).find(Boolean)||'';const name=get('name','asset_name','asset');const ens=get('ens','ens_name','name_ens')||`${name.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,24)}.lseg.com`;if(!name)return null;return{name,short:get('short_name')||name,ticker:get('ticker','symbol')||'RWA',type:get('type','asset_type','asset_class')||'Tokenized asset',ens,isin:get('isin'),lei:get('lei'),dti:get('dti'),country:get('country','issuer_country'),addresses:{Ethereum:get('ethereum','ethereum_address','eth_address'),Solana:get('solana','solana_address'),Stellar:get('stellar','stellar_address')}}}).filter(Boolean)}
