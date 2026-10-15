@@ -1,194 +1,626 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Interactive concept demo showing how ENS names could help people find LSEG tokenized assets across networks.">
-<title>LSEG × ENS | Find the right asset</title>
+<title>Tokenized Asset Registry · a concept for LSEG</title>
+<meta name="description" content="A concept by ENS Labs for London Stock Exchange Group, based on the demo by Jason. All sample data is fictional.">
+<link rel="stylesheet" href="assets/ens.css">
 <style>
-:root{--navy:#092c48;--ink:#17334c;--muted:#5b7083;--blue:#1769e8;--blue2:#eaf3ff;--teal:#13a8a1;--green:#087d59;--line:#dbe5ed;--paper:#f3f7fa;--white:#fff;--shadow:0 20px 60px #092c4815;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,"Avenir Next",Arial,sans-serif;color:var(--ink);background:var(--paper)}body{height:100svh;overflow:hidden}button,input{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible{outline:3px solid #1769e866;outline-offset:2px}.top{height:62px;position:fixed;inset:0 0 auto;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,42px);background:#f3f7faed;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;color:var(--navy)}.logo{width:29px;height:29px;border-radius:9px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:850}.brand small{font-size:12px;color:var(--muted);font-weight:650;margin-left:3px}.topnote{font-size:12px;color:var(--muted);font-weight:650}.deck{position:fixed;inset:62px 0 62px}.slide{height:100%;width:100%;display:none;overflow-y:auto;padding:clamp(24px,4vh,48px) clamp(18px,5vw,76px);scrollbar-width:thin}.slide.active{display:flex;align-items:center;justify-content:center;animation:enter .35s ease both}@keyframes enter{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:none}}.layout{width:min(1280px,100%);display:grid;grid-template-columns:minmax(260px,.78fr) minmax(0,1.22fr);gap:clamp(28px,5.4vw,78px);align-items:center}.copy{max-width:490px}.eyebrow{margin:0 0 16px;color:var(--blue);font-size:12px;text-transform:uppercase;letter-spacing:.13em;font-weight:850}.copy h1{margin:0;color:var(--navy);font-size:clamp(40px,5.2vw,72px);line-height:.97;letter-spacing:-.065em;font-weight:760}.copy p{margin:20px 0 0;color:var(--muted);font-size:clamp(17px,1.5vw,21px);line-height:1.45}.copy p strong{color:var(--navy)}.callout{margin-top:23px;padding:13px 15px;border-left:3px solid var(--teal);background:#eaf8f6;border-radius:0 12px 12px 0;color:#1b5e5b;font-size:13px;line-height:1.4}.panel{min-width:0;border:1px solid var(--line);border-radius:23px;background:var(--white);box-shadow:var(--shadow);overflow:hidden}.panel-head{min-height:52px;padding:12px 19px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;font-weight:800;color:var(--navy)}.panel-body{padding:clamp(16px,2.3vw,28px)}.eyelabel{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:850;color:var(--muted)}.domainbox{padding:clamp(18px,2.7vw,30px);border:1px solid #cfe1f7;border-radius:17px;background:linear-gradient(135deg,#f8fbff,#eaf3ff)}.domain{margin-top:6px;color:var(--navy);font-weight:800;font-size:clamp(27px,4vw,43px);letter-spacing:-.05em}.subline{font-size:12px;line-height:1.5;color:var(--muted);margin-top:6px}.tree{display:grid;grid-template-columns:1fr;gap:8px;margin-top:15px}.treeitem{padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px}.treeitem.parent{background:#f6f9fc}.treeitem.child{margin-left:clamp(12px,4vw,40px);border-color:#c8ddf8;background:var(--blue2)}.treeitem b{font-size:13px}.treeitem span{font-size:11px;color:var(--muted)}.csvbox{margin-top:18px;padding:15px;border:1px dashed #aabfd2;border-radius:15px;background:#fbfdff}.csvtop{display:flex;justify-content:space-between;align-items:center;gap:12px}.csvtitle{font-size:13px;font-weight:800}.action{border:0;background:var(--blue);color:#fff;border-radius:10px;padding:10px 13px;font-size:12px;font-weight:800;white-space:nowrap}.action.secondary{background:#eef4fb;color:var(--navy);border:1px solid var(--line)}.asset-list{margin-top:11px;display:grid;gap:6px}.asset-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:9px 11px;background:#fff;border:1px solid #edf1f4;border-radius:10px;align-items:center}.asset-item button{border:0;background:transparent;text-align:left;min-width:0;padding:0}.asset-item b{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.asset-item small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.pill{padding:5px 8px;border-radius:99px;background:#e8f6ef;color:var(--green);font-size:10px;font-weight:800;white-space:nowrap}.micro{margin-top:11px;color:#718396;font-size:10px;line-height:1.45}.summary{display:flex;align-items:center;gap:13px;padding:16px;border-radius:15px;background:var(--navy);color:#fff}.assetmark{width:42px;height:42px;border-radius:13px;background:#dff4f0;color:#075a58;display:grid;place-items:center;font-weight:900;flex:none}.summary b{display:block;font-size:15px}.summary small{display:block;color:#c1d4e1;margin-top:4px;font-size:11px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 12px}.tab{padding:8px 11px;border:1px solid var(--line);border-radius:99px;background:#fff;font-size:11px;font-weight:800;color:var(--muted)}.tab.active{background:var(--blue2);color:var(--blue);border-color:#b5d1f4}.addressbox{padding:13px 14px;border:1px solid #cfe1f7;border-radius:12px;background:#f7fbff}.addressbox .addr{display:block;margin-top:7px;color:var(--navy);font:12px/1.45 var(--mono);overflow-wrap:anywhere}.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.fact{padding:11px;background:#f4f7f9;border-radius:11px;min-width:0}.fact span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:800}.fact b{display:block;margin-top:5px;font-size:11px;overflow-wrap:anywhere}.profilefooter{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.lookupbar{display:flex;gap:8px}.lookupbar input{min-width:0;flex:1;border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:#fbfdff;color:var(--navy);font-size:13px;font-weight:750}.lookup-result{margin-top:13px;border:1px solid var(--line);border-radius:15px;overflow:hidden}.result-head{padding:13px 15px;background:#f5f9fc;display:flex;justify-content:space-between;align-items:center;gap:10px}.result-head b{font-size:12px;overflow-wrap:anywhere}.verification{display:flex;gap:7px;align-items:center;color:var(--green);font-size:10px;font-weight:850}.verification i{width:8px;height:8px;border-radius:50%;background:#16a673}.result-content{padding:14px}.result-content .facts{margin-top:12px}.note{padding:10px 12px;border-radius:10px;background:#fff8e8;color:#755516;font-size:10px;line-height:1.45;margin-top:11px}.picker{border:1px solid var(--line);border-radius:15px;overflow:hidden}.picker-top{background:#f5f8fa;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:10px}.picker-top b{font-size:12px}.searchinput{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-top:10px;font-size:12px}.picker-row{width:100%;border:0;border-bottom:1px solid #edf1f4;background:#fff;padding:12px 14px;display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left}.picker-row:last-child{border:0}.picker-row:hover,.picker-row.selected{background:#f2f8ff}.token-icon{width:34px;height:34px;border-radius:10px;background:#e6eff9;color:#244c70;display:grid;place-items:center;font-size:11px;font-weight:900}.picker-row strong{font-size:12px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.picker-row small{font-size:10px;color:var(--muted);display:block;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.source-tag{font-size:9px;font-weight:850;color:var(--green);background:#e8f6ef;border-radius:99px;padding:5px 7px;white-space:nowrap}.discovery-callout{margin-top:12px;padding:12px 14px;background:#eef7ff;border:1px solid #d5e7fa;border-radius:12px;font-size:11px;color:#365774;line-height:1.5}.nav{height:62px;position:fixed;inset:auto 0 0;z-index:5;padding:0 clamp(14px,4vw,42px);background:#f3f7fa;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto 1fr;align-items:center}.nav button{border:0;border-radius:10px;background:var(--navy);color:#fff;padding:9px 13px;font-size:11px;font-weight:800}.nav button:disabled{opacity:.35;cursor:default}.nav .prev{justify-self:start}.nav .next{justify-self:end}.navcenter{display:flex;align-items:center;gap:12px}.progress{display:flex;align-items:center;gap:6px}.progress button{width:7px;height:7px;border:0;padding:0;border-radius:9px;background:#c3d0dc}.progress button.active{width:23px;background:var(--blue)}.counter{font-size:11px;color:var(--muted);font-weight:800;white-space:nowrap}.endnote{font-size:9px;color:#74879a;margin-top:10px;line-height:1.4}
-@media(max-width:820px){body{overflow:hidden}.deck{inset:62px 0 58px}.slide{padding:22px 20px 30px;align-items:flex-start!important;justify-content:flex-start!important}.layout{grid-template-columns:1fr;gap:17px;max-width:620px;margin:auto}.copy{max-width:none}.eyebrow{margin-bottom:10px}.copy h1{font-size:clamp(38px,8vw,58px);max-width:680px}.copy p{margin-top:12px;font-size:16px;max-width:650px}.callout{margin-top:13px}.panel{border-radius:17px}.panel-head{min-height:46px;padding:10px 14px}.panel-body{padding:15px}.topnote{display:none}.nav{height:58px}.navcenter{gap:8px}.counter{font-size:10px}}
-@media(max-width:480px){.brand small{display:none}.slide{padding-left:14px;padding-right:14px}.copy h1{font-size:39px}.copy p{font-size:15px}.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.panel-body{padding:13px}.domainbox{padding:17px}.nav{padding:0 10px;grid-template-columns:auto 1fr auto;gap:8px}.nav button{padding:9px 10px}.navcenter{justify-self:center}.counter{display:none}.progress{gap:5px}.picker-row{grid-template-columns:32px minmax(0,1fr) auto;padding:10px}.source-tag{font-size:8px}.lookupbar{gap:6px}.lookupbar .action{padding:9px;font-size:11px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; }
+  body { display: flex; flex-direction: column; min-height: 100dvh; }
 
-/* Visual direction: quiet, editorial, ENS Labs demo inspired. */
-:root{--navy:#1d1d1f;--ink:#1d1d1f;--muted:#6e6e73;--blue:#1469e8;--blue2:#eaf2ff;--teal:#1469e8;--green:#168348;--line:rgba(29,29,31,.1);--paper:#f5f5f7;--shadow:0 18px 48px rgba(0,0,0,.07)}
-body{font-family:"SF Pro Text","Avenir Next","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
-.top{background:rgba(245,245,247,.78);border-color:rgba(0,0,0,.04);backdrop-filter:saturate(180%) blur(20px)}
-.logo{background:linear-gradient(145deg,#69a7ff,#1469e8);border-radius:9px}
-.brand{font-weight:650;letter-spacing:-.01em}
-.topnote{font-weight:550}
-.copy h1{font-family:"SF Pro Display","Avenir Next","Helvetica Neue",sans-serif;font-weight:650;letter-spacing:-.07em;line-height:.94}
-.eyebrow{font-size:12px;letter-spacing:.1em;font-weight:750}
-.copy p{font-weight:450;letter-spacing:-.015em}
-.callout{padding:0 0 0 13px;border-left:2px solid var(--blue);background:transparent;border-radius:0;color:#515154;font-size:12px}
-.panel{border-color:rgba(0,0,0,.08);border-radius:24px;box-shadow:0 28px 70px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.04)}
-.panel-head{color:#515154;font-weight:650;font-size:13px}
-.domainbox{border-color:rgba(20,105,232,.12);background:linear-gradient(145deg,#f7faff,#edf4ff);border-radius:17px}
-.tree{gap:0}.treeitem{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 3px;background:transparent}.treeitem.parent{background:transparent}.treeitem.child{margin-left:18px;border-color:var(--line);background:transparent}.treeitem:last-child{border-bottom:0}
-.csvbox{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;padding:15px 0 0}.csvtop{align-items:center}.action{border-radius:9px;font-weight:700}.action.secondary{background:white}.asset-item{padding:8px 4px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent}.asset-item:last-child{border-bottom:0}.pill{font-size:10px;font-weight:700;padding:4px 8px}.summary{padding:0 0 14px;border-bottom:1px solid var(--line);border-radius:0;background:transparent;color:var(--ink)}.summary small{color:var(--muted)}.assetmark{border-radius:12px;background:#eaf2ff;color:var(--blue)}.tabs{gap:16px;margin:15px 0 12px;border-bottom:1px solid var(--line)}.tab{border:0;border-radius:0;padding:8px 1px 9px;background:transparent;font-size:12px;font-weight:650}.tab.active{background:transparent;color:var(--blue);border-bottom:2px solid var(--blue)}.addressbox{border:0;border-radius:0;border-bottom:1px solid var(--line);background:transparent;padding:12px 0}.facts{gap:0 15px}.fact{padding:10px 2px;border-radius:0;border-bottom:1px solid var(--line);background:transparent}.fact span{font-size:9px;letter-spacing:.06em}.fact b{font-size:12px;font-weight:650}.lookupbar input{background:#f1f1f3;border:0;border-radius:12px}.lookup-result{border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 22px rgba(0,0,0,.04)}.result-head{background:#f8f8fa}.verification{font-weight:700}.note{background:#f5f5f7;color:#515154;border-radius:9px}.picker{border-radius:15px;box-shadow:0 12px 34px rgba(0,0,0,.06)}.picker-top{background:#fafafa}.picker-row{padding-block:13px}.discovery-callout{background:#f4f8ff;border-color:#e2edfc;border-radius:10px}.nav{background:rgba(245,245,247,.92);border-color:rgba(0,0,0,.08);backdrop-filter:blur(16px)}.nav button{background:transparent;color:var(--blue);padding:9px 4px}.nav button:disabled{opacity:.35}.progress button{background:#c7c7cc}.progress button.active{background:var(--blue)}
-@media(max-width:820px){.panel{box-shadow:0 15px 42px rgba(0,0,0,.08)}.copy h1{font-size:clamp(38px,8vw,56px)}}
-@media(max-width:480px){.panel{border-radius:18px}.nav button{padding:9px 2px}.facts{gap:0 12px}}
-.compare-tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin-bottom:18px}.compare-tab{padding:8px 1px 10px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font-size:13px;font-weight:650}.compare-tab.active{border-color:var(--blue);color:var(--blue)}.compare-stage{display:grid;min-height:320px}.compare-view{grid-area:1/1;min-width:0}.compare-view[hidden]{display:block!important;visibility:hidden;pointer-events:none}.compare-view .subline{margin-top:15px}.compare-view .domain{margin:8px 0 12px}
+  /* shell */
+  .top { display: flex; align-items: center; gap: 12px; padding: 16px clamp(16px, 4vw, 40px); border-bottom: 1px solid var(--border); }
+  .wordmark { font-size: 1.0625rem; font-weight: var(--heading-weight); letter-spacing: -.01em; }
+  .wordmark b { font-weight: inherit; color: var(--accent-text); }
+  .top .sep { width: 1px; height: 18px; background: var(--border); }
+  .top .for { color: var(--muted-foreground); font-size: .875rem; }
+  .top .tag { margin-left: auto; }
+  body.on-cover .top { visibility: hidden; }
 
-/* ENS B2B deck palette and chain motif. */
-:root{--navy:#082735;--ink:#082735;--muted:#536b78;--blue:#258db8;--blue2:#e7f4f8;--teal:#258db8;--green:#138878;--line:#dce7eb;--paper:#cce4ed;--shadow:none}
-.top{background:#cce4ed;border:0}.brand{gap:13px;color:var(--navy);font-weight:700}.ens-logo{width:76px;height:auto;filter:brightness(0) saturate(100%) invert(49%) sepia(36%) saturate(793%) hue-rotate(151deg) brightness(93%) contrast(88%)}.brand-divider{width:1px;height:20px;background:#88aeba}.topnote{color:#58717d;font-size:11px;letter-spacing:.02em}
-.deck{background:#fff}.slide{background:linear-gradient(90deg,#cce4ed 0 43%,#fff 43% 100%)}.copy h1{color:#258db8;font-weight:700;letter-spacing:-.055em}.copy p{color:#244653}.copy p strong{color:#082735}
-.panel{border:0;border-radius:0;box-shadow:none;background:transparent}.panel-head{background:transparent;color:#082735;border-bottom:1px solid #a9c7d1}.panel-body{background:#fff}.domainbox{border:0;border-radius:0;background:#e8f4f8}
-.tree{gap:0}.treeitem,.treeitem.parent,.treeitem.child{border:0;border-bottom:1px solid #dce7eb;border-radius:0;background:transparent}.treeitem.child{margin-left:18px}.csvbox{border:0;border-top:1px solid #c6d9df;border-radius:0;background:#fff}.asset-item{border:0;border-bottom:1px solid #dce7eb;border-radius:0;background:#fff}
-.summary{background:#f3f8fa;color:#082735;border-radius:0}.summary small{color:#536b78}.assetmark{background:#cce4ed;color:#0c536e;border-radius:0}.addressbox{border:0;border-bottom:1px solid #b8d0d8;border-radius:0;background:#f3f8fa}.tab{border:0;border-radius:0;background:transparent}.tab.active{border-color:#258db8;background:transparent}.fact{border-radius:0;background:transparent;border-bottom:1px solid #dce7eb}.lookupbar input{background:#eff6f8;border-radius:2px}.lookup-result{border:0;border-radius:0;box-shadow:none}.result-head{background:#eaf4f7}.note{border-radius:0;background:#eef6f8;color:#425d69}
-.picker{border:0;border-radius:0;box-shadow:none}.picker-top{background:#eaf4f7}.picker-row{border-color:#dce7eb}.token-icon{border-radius:0;background:#cce4ed;color:#0c536e}.source-tag,.pill{border-radius:0;background:#e0f2f1;color:#0b7268}.action{border-radius:0;background:#127e9f}.action.secondary{background:#d8edf3;color:#0b5268;border:0}.discovery-callout{border:0;border-left:3px solid #258db8;border-radius:0;background:#eef6f8}
-.nav{background:#fff;border:0;box-shadow:0 -1px 0 #dce7eb}.nav:before{content:"";position:absolute;top:-7px;left:0;right:0;height:7px;background:repeating-linear-gradient(135deg,#258db8 0 1px,transparent 1px 4px),#d8edf3;opacity:.7}.nav button{color:#1783aa}.progress button{background:#abc7d0}.progress button.active{background:#258db8}
-@media(max-width:820px){.slide{background:linear-gradient(180deg,#cce4ed 0 39%,#fff 39%)}.panel{border:0;box-shadow:none}.panel-body{padding:15px}.copy h1{color:#258db8}}@media(max-width:480px){.ens-logo{width:63px}.slide{background:linear-gradient(180deg,#cce4ed 0 38%,#fff 38%)}.panel-body{padding:13px}}
+  main { flex: 1; position: relative; overflow: hidden; }
+  .slide { position: absolute; inset: 0; overflow-y: auto; padding: clamp(24px, 5vw, 64px) clamp(16px, 5vw, 64px) 32px;
+    display: none; }
+  .slide.active { display: block; animation: in .3s var(--ease); }
+  @keyframes in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+  .wrap { max-width: 1120px; margin: 0 auto; min-height: 100%; display: grid; align-content: center; gap: 32px; }
+  .split { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: center; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; align-content: start; } }
 
-.ticker-search{display:flex;align-items:center;gap:8px;margin:10px 0 12px;padding:10px 12px;background:#eef6f8;border-bottom:1px solid #a9c7d1;color:#258db8}.ticker-search span{font-size:17px}.ticker-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#082735;font-weight:750;font-size:14px}.candidate-list{border-top:1px solid #dce7eb}.candidate{display:grid;grid-template-columns:70px minmax(0,1fr);align-items:start;gap:10px;padding:9px 0;border-bottom:1px solid #dce7eb}.candidate[hidden]{display:none}.candidate span{font-size:10px;color:#536b78;font-weight:700;padding-top:2px}.candidate code,.resolved code{font:10px/1.4 var(--mono);color:#082735;overflow-wrap:anywhere;word-break:break-all}.resolved{margin-top:16px;padding:16px;background:#e8f4f8}.resolved code{display:block;margin-top:8px;font-size:12px}.resolved-badge{display:inline-block;margin-top:12px;padding-top:8px;border-top:1px solid #b8d0d8;color:#0b7268;font-size:10px;font-weight:750}
-.result-content .addr{display:block;margin-top:8px;color:#082735;font:12px/1.5 var(--mono);overflow-wrap:anywhere;word-break:break-all}
-.result-head{flex-wrap:wrap}.result-identity b{display:block;font-size:13px}.result-identity small{display:block;margin-top:4px;color:#536b78;font-size:11px;overflow-wrap:anywhere}.verification{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;background:#e7f4f8;color:#0c688e;font-size:10px;font-weight:750;white-space:nowrap}.verification i{display:grid;place-items:center;width:14px;height:14px;border-radius:50%;background:#258db8;color:#fff;font-size:10px;font-style:normal;line-height:1}
-.tree{margin-top:0}
-.registry-panel .treeitem b{font-size:17px;line-height:1.3}.registry-panel .treeitem span{font-size:12px}.registry-panel .csvtitle{font-size:16px}.registry-panel .asset-item b{font-size:14px;line-height:1.3;white-space:normal;overflow:visible;text-overflow:clip}.registry-panel .asset-item small{font-size:12px;line-height:1.35}.registry-panel .micro,.registry-panel .pill{font-size:11px}.registry-panel .action{font-size:13px}
-.brand-lseg{font-size:23px;line-height:1;letter-spacing:-.035em}
-.section-label{margin-top:16px}.address-list{margin-top:8px;border-top:1px solid #dce7eb}.address-row{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;align-items:start;padding:11px 2px;border-bottom:1px solid #dce7eb}.address-row strong{font-size:12px;line-height:1.4}.address-row code{font:11px/1.5 var(--mono);color:#082735;overflow-wrap:anywhere;word-break:break-all}.result-content .section-label:first-child{margin-top:0}.result-content .facts{margin-top:8px}
-.eyelabel,.fact span,.candidate span,.treeitem span,.asset-item small,.picker-row small,.result-identity small,.summary small{font-size:12px}.summary b,.result-identity b{font-size:17px}.csvtitle,.picker-top b{font-size:16px}.fact b,.asset-item b,.picker-row strong,.address-row strong{font-size:14px}.candidate code,.resolved code,.address-row code{font-size:12px}.action{font-size:13px}.micro,.pill,.note,.resolved-badge,.verification,.source-tag{font-size:11px}.compare-tab{font-size:14px}.lookupbar input,.ticker-search input,.searchinput{font-size:15px}
-.slide--profile .copy h1{font-size:clamp(34px,3.4vw,44px)}
-.slide.active{align-items:center;align-items:safe center}
-@media(max-width:480px){.candidate{grid-template-columns:60px minmax(0,1fr);gap:7px;padding:8px 0}.candidate code{font-size:9px}.resolved code{font-size:12px}}
-@media(max-width:820px){
-  .slide,.slide.active{background:#fff;padding:0;align-items:stretch!important;justify-content:flex-start!important}
-  .slide.active{display:block}
-  .layout{display:block;width:100%;max-width:none;margin:0}
-  .copy{width:100%;max-width:none;background:#cce4ed;padding:32px max(20px,calc((100vw - 660px)/2)) 28px}
-  .copy h1,.copy p{max-width:660px;margin-left:auto;margin-right:auto}
-  .copy h1{font-size:clamp(38px,7vw,56px);line-height:1.02}
-  .copy p{margin-top:14px;font-size:16px;line-height:1.45}
-  .panel{width:min(100%,700px);margin:0 auto;overflow:visible}
-  .panel-head{padding:14px 20px;background:#fff}
-  .panel-body{padding:20px;background:#fff}
-  .compare-stage{display:block;min-height:0}
-  .compare-view[hidden]{display:none!important}
-}
-@media(max-width:480px){
-  .brand-lseg{font-size:19px}
-  .copy{padding:28px 16px 25px}
-  .copy h1{font-size:clamp(34px,9.3vw,39px)}
-  .copy p{font-size:15px}
-  .panel-head{padding:13px 16px}
-  .panel-body{padding:16px}
-  .csvtop{flex-wrap:wrap}
-  .csvtop>div:last-child{width:100%;flex-wrap:wrap}
-  .action,.tab,.compare-tab{min-height:44px}
-  .lookupbar input,.ticker-search input,.searchinput{font-size:16px}
-  .lookupbar .action{padding:9px 12px;font-size:13px}
-  .candidate code{font-size:12px}
-  .verification{font-size:11px}
-  .nav button{min-height:44px;font-size:13px;padding:9px 8px}
-  .picker-row strong{font-size:14px}
-  .picker-row small{font-size:12px}
-  .source-tag{font-size:11px}
-  .address-row{grid-template-columns:1fr;gap:4px;padding:12px 0}
-  .address-row strong{font-size:14px}
-  .address-row code{font-size:12px}
-}
-.cover-slide{background:#cce4ed;padding:clamp(32px,5vh,64px) clamp(24px,6vw,88px)}
-.cover-slide.active{display:flex;align-items:safe center;justify-content:center}
-.cover-layout{width:min(1180px,100%);margin:0 auto;text-align:center}
-.cover-brand{display:flex;align-items:center;justify-content:center;gap:clamp(20px,3.5vw,48px);margin-bottom:clamp(34px,5vh,56px)}
-.cover-ens-logo{display:block;width:clamp(190px,21vw,305px);height:auto}
-.cover-cross{color:#4b899e;font-size:clamp(42px,5vw,72px);font-weight:300;line-height:1}
-.cover-lseg-logo{color:#082735;font-family:"Avenir Next","Helvetica Neue",Arial,sans-serif;font-size:clamp(62px,7vw,102px);font-weight:750;letter-spacing:-.075em;line-height:1}
-.cover-layout h1{max-width:1000px;margin:0 auto;color:#0c688e;font-size:clamp(48px,5.8vw,82px);font-weight:700;letter-spacing:-.055em;line-height:1.04}
-.problem-list{list-style:none;display:grid;grid-template-columns:1fr;gap:0;margin:0;padding:0}
-.problem-item{padding:17px 3px;border-bottom:1px solid #dce7eb;color:#244653;font-size:16px;line-height:1.4}
-.problem-item:last-child{border-bottom:0}
-.problem-item strong{display:block;margin-bottom:6px;color:#0c688e;font-size:19px;line-height:1.2}
-.on-cover .top{display:none}
-.on-cover .deck{top:0}
-@media(max-width:820px){
-  .cover-slide,.cover-slide.active{background:#cce4ed;padding:32px 24px 38px}
-  .cover-slide.active{display:flex;align-items:safe center!important;justify-content:center!important}
-  .cover-brand{gap:22px;margin-bottom:28px}
-  .cover-ens-logo{width:clamp(150px,26vw,215px)}
-  .cover-lseg-logo{font-size:clamp(51px,9vw,76px)}
-  .cover-cross{font-size:44px}
-  .cover-layout h1{font-size:clamp(36px,5.4vw,48px)}
-  .problem-item{padding:16px 2px}
-  .problem-item strong{margin-bottom:5px}
-}
-@media(max-width:480px){
-  .cover-slide,.cover-slide.active{padding:27px 16px 34px}
-  .cover-brand{gap:14px;margin-bottom:26px}
-  .cover-ens-logo{width:min(33vw,140px)}
-  .cover-cross{font-size:32px}
-  .cover-lseg-logo{font-size:clamp(42px,12vw,57px)}
-  .cover-layout h1{font-size:34px;line-height:1.08}
-  .problem-item{font-size:15px}
-}
+  .kicker { color: var(--muted-foreground); margin-bottom: 16px; }
+  /* one heading and subheading style for every content slide; the cover overrides the size only */
+  .slide h1 { font-size: var(--text-heading); line-height: 2.25rem; max-width: 26ch; }
+  .lede { font-size: 1.0625rem; line-height: 1.6rem; color: var(--muted-foreground); margin: 16px 0 0; max-width: 46ch; }  .micro { font-size: var(--text-small); line-height: 1.1rem; color: var(--muted-foreground); }
+
+  /* cover */
+  .cover .wrap { align-content: center; justify-items: start; }
+  .cover h1 { font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.05; max-width: 16ch; }
+  .cover .serif { font-style: italic; }
+  .cover .meta { display: flex; flex-wrap: wrap; gap: 8px 24px; color: var(--muted-foreground); font-size: .875rem; }
+  .cover .meta span::before { content: "— "; color: var(--border); }
+  .cover .meta span:first-child::before { content: none; }
+
+  /* problem */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar { padding: 24px; }
+  .pillar .n { font-family: var(--font-mono); color: var(--accent-text); font-size: .8125rem; }
+  .pillar h3 { margin: 24px 0 8px; }
+  .pillar p { margin: 0; color: var(--muted-foreground); }
+
+  /* panels */
+  .panel { padding: 0; overflow: hidden; }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .panel-body { padding: 20px; display: grid; gap: 16px; background: var(--background); }
+  .tabs { display: inline-flex; padding: 3px; gap: 2px; background: var(--muted); border-radius: var(--radius); }
+  .tabs button { font: inherit; font-size: .875rem; letter-spacing: var(--text-ui-tracking); border: 0; background: transparent; color: var(--muted-foreground);
+    padding: 6px 12px; border-radius: var(--radius-sm); cursor: pointer; }
+  .tabs button[aria-selected="true"] { background: var(--background); color: var(--foreground); box-shadow: 0 0 0 1px var(--border); }
+  label.field { display: grid; gap: 6px; font-size: .8125rem; color: var(--muted-foreground); }
+  .input { width: 100%; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--background); }
+  .row .chain { width: 78px; flex: none; font-size: .8125rem; color: var(--muted-foreground); }
+  .row .addr { font-family: var(--font-mono); font-size: .8125rem; overflow-wrap: anywhere; min-width: 0; flex: 1; }
+  .list { display: grid; gap: 8px; }
+  .callout { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius); font-size: .875rem; }
+  .callout.warn { background: var(--warning-fill); color: var(--warning-text); }
+  .callout.ok { background: var(--success-fill); color: var(--success-text); }
+  .empty { padding: 14px; text-align: center; color: var(--muted-foreground); font-size: .875rem; border: 1px dashed var(--border); border-radius: var(--radius); }
+
+  /* registry tree */
+  .tree { display: grid; gap: 6px; padding-left: 4px; }
+  .tree .node { display: flex; align-items: center; gap: 10px; font-size: .8125rem; color: var(--muted-foreground); }
+  .tree .child { padding-left: 22px; position: relative; }
+  .tree .child::before { content: ""; position: absolute; left: 8px; top: -6px; width: 10px; height: 18px; border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .asset { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer;
+    padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--background); }
+  .asset:hover { background: var(--card); }
+  .asset:focus-visible { outline: 3px solid color-mix(in srgb, var(--ring) 50%, transparent); }
+  .asset .who { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .asset .who small { color: var(--muted-foreground); font-size: .8125rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .asset.picked { border-color: var(--accent-text); background: var(--accent-fill); }
+  .mark { width: 32px; height: 32px; flex: none; border-radius: 999px; display: grid; place-items: center; font-size: .8125rem;
+    background: var(--avatar-gradient); color: #191919; font-weight: 500; }
+  .mark.lg { width: 48px; height: 48px; font-size: 1.125rem; }
+  .asset.new { animation: flash 1.2s var(--ease); }
+  @keyframes flash { from { background: var(--success-fill); } }
+
+  /* profile */
+  .summary { display: flex; align-items: center; gap: 14px; }
+  .summary h3 { margin-bottom: 4px; }
+  dl.kv { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  dl.kv dt, dl.kv dd { margin: 0; padding: 9px 12px; border-top: 1px solid var(--border); font-size: .8125rem; }
+  dl.kv dt { color: var(--muted-foreground); font-family: var(--font-semi-mono); }
+  dl.kv dd { font-family: var(--font-mono); overflow-wrap: anywhere; }
+  dl.kv dt:first-of-type, dl.kv dd:first-of-type { border-top: 0; }
+  .sect { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .sect .smallcaps { color: var(--muted-foreground); }
+
+  .lookupbar { display: flex; gap: 8px; }
+  .lookupbar .input { flex: 1; font-family: var(--font-semi-mono); }
+
+  /* close */
+  .qs { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: q; }
+  .qs li { counter-increment: q; display: flex; gap: 14px; padding: 14px 16px; }
+  .qs li::before { content: counter(q, decimal-leading-zero); font-family: var(--font-mono); color: var(--accent-text); font-size: .8125rem; padding-top: 2px; }
+
+  /* nav */
+  .nav { display: flex; align-items: center; gap: 16px; padding: 12px clamp(16px, 4vw, 40px); border-top: 1px solid var(--border); }
+  .dots { display: flex; gap: 6px; margin: 0 auto; }
+  .dots button { width: 8px; height: 8px; padding: 0; border-radius: 999px; border: 0; background: var(--neutral-3); cursor: pointer; transition: width .2s var(--ease); }
+  .dots button[aria-current="true"] { width: 24px; background: var(--foreground); }
+  .count { font-family: var(--font-mono); font-size: .8125rem; color: var(--muted-foreground); min-width: 56px; text-align: right; }
+  .credit { font-size: var(--text-small); color: var(--muted-foreground); }
+  @media (max-width: 600px) { .qs li { display: block; } .qs li::before { margin-right: 14px; } .credit, .top .for { display: none; } .nav .btn .lbl { display: none; } }
 </style>
 </head>
-<body class="on-cover">
-<header class="top"><div class="brand"><img class="ens-logo" src="assets/ens-logo.svg" alt="ENS"><span class="brand-divider"></span><span class="brand-lseg">LSEG</span></div><div class="topnote">Concept demo</div></header>
-<main class="deck" id="deck" aria-live="polite">
-  <section class="slide cover-slide active" aria-label="Creating a tokenized asset registry system">
-    <div class="cover-layout"><div class="cover-brand" aria-label="LSEG and ENS"><span class="cover-lseg-logo" role="img" aria-label="LSEG">LSEG</span><span class="cover-cross" aria-hidden="true">×</span><img class="cover-ens-logo" src="assets/ens-logo.svg" alt="ENS"></div><h1>Creating a tokenized asset registry system</h1></div>
+<body class="ens on-cover">
+
+<header class="top">
+  <span class="wordmark">ENS <b>Labs</b></span>
+  <span class="sep" aria-hidden="true"></span>
+  <span class="for">A concept for London Stock Exchange Group</span>
+  <span class="tag warning">Concept demo · fictional data</span>
+</header>
+
+<main id="deck">
+
+  <!-- 1 · cover -->
+  <section class="slide cover active" aria-label="Cover">
+    <div class="wrap" style="gap:40px">
+      <div class="caps muted">A concept for London Stock Exchange Group</div>
+      <h1>Creating a <span class="serif">tokenized asset</span> registry system</h1>
+      <p class="lede" style="margin:0">One name for every tokenized asset, across Ethereum, Solana and Stellar. Shown with names like <span class="entity">acmefund.lseg.com</span>.</p>
+      <div class="meta"><span>Concept by ENS Labs</span><span>Based on the demo by Jason</span><span>All sample data is fictional</span></div>
+    </div>
   </section>
-  <section class="slide" aria-label="The tokenized asset identity problem">
-    <div class="layout"><div class="copy"><h1>As digital assets move onchain, there are core attributes that need to be maintained during the tokenization process:</h1></div>
-    <div class="panel problem-panel"><div class="panel-body"><ul class="problem-list"><li class="problem-item"><strong>Provenance:</strong> How can an issuer keep a record of where the asset is generated, by which issuing body?</li><li class="problem-item"><strong>Discoverability:</strong> Can we find the legitimate, compliant version of an asset onchain?</li><li class="problem-item"><strong>Compliance:</strong> Does the taxonomy system include essential identifiers required by local regulations?</li></ul></div></div></div>
+
+  <!-- 2 · problem -->
+  <section class="slide" aria-label="The identity problem">
+    <div class="wrap">
+      <div>
+        <div class="caps kicker">The identity problem</div>
+        <h1>As digital assets move onchain, three attributes need to survive tokenization.</h1>
+      </div>
+      <div class="pillars">
+        <div class="card pillar"><span class="n">01</span><h3>Provenance</h3><p>How can an issuer keep a record of where the asset is generated, and by which issuing body?</p></div>
+        <div class="card pillar"><span class="n">02</span><h3>Discoverability</h3><p>Can we find the legitimate, compliant version of an asset onchain?</p></div>
+        <div class="card pillar"><span class="n">03</span><h3>Compliance</h3><p>Does the taxonomy include the identifiers that local regulations require?</p></div>
+      </div>
+    </div>
   </section>
-  <section class="slide" aria-label="A credible name for each asset">
-    <div class="layout"><div class="copy"><h1>As assets move onchain, there needs to be a credible way to prove provenance.</h1><p>ENS provides LSEG a credible name for each tokenized asset that moves onchain. One name corresponds with each asset, across any blockchain network.</p></div>
-    <div class="panel"><div class="panel-body"><div class="compare-tabs" role="tablist" aria-label="Compare asset lookup"><button class="compare-tab active" id="problemTab" role="tab" aria-selected="true" aria-controls="problemView">Using an Address</button><button class="compare-tab" id="ensTab" role="tab" aria-selected="false" aria-controls="ensView">With ENS</button></div><div class="compare-stage"><div class="compare-view" id="problemView" role="tabpanel" aria-labelledby="problemTab"><label class="eyelabel" for="tickerSearch">Asset name</label><div class="ticker-search"><span>⌕</span><input id="tickerSearch" value="Acme Fund" placeholder="Enter asset name" autocomplete="off"></div><div class="candidate-list"><div class="candidate" data-ticker="acme"><span>Ethereum</span><code>0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f</code></div><div class="candidate" data-ticker="acme"><span>Ethereum</span><code>0xf2c84d30f9217ea4a35fce921d6f123a9b409e71</code></div><div class="candidate" data-ticker="acme"><span>Solana</span><code>7xKp4mQ9sVn2eRt6aBc3DgFhJkLmNwYp8qRsTuVmQ9s</code></div><div class="candidate" data-ticker="acme"><span>Stellar</span><code>GDX4KQ2M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W2LM</code></div></div></div><div class="compare-view" id="ensView" role="tabpanel" aria-labelledby="ensTab" hidden><label class="eyelabel" for="ensSearch">ENS name</label><div class="ticker-search"><span>⌕</span><input id="ensSearch" value="acmefund.lseg.com" readonly></div><div class="resolved"><div class="eyelabel">Ethereum token address</div><code>0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f</code><span class="resolved-badge">1 match · LSEG registry</span></div></div></div></div></div></div>
+
+  <!-- 3 · address vs name -->
+  <section class="slide" aria-label="A credible name">
+    <div class="wrap split">
+      <div>
+        <div class="caps kicker">Provenance</div>
+        <h1>As assets move onchain, there needs to be a credible way to show provenance.</h1>
+        <p class="lede">ENS gives LSEG a credible name for each tokenized asset. One name corresponds to each asset, across any blockchain network.</p>
+      </div>
+      <div class="card panel">
+        <div class="panel-head">
+          <div class="tabs" role="tablist">
+            <button role="tab" aria-selected="true" data-tab="addr">Using an address</button>
+            <button role="tab" aria-selected="false" data-tab="ens">With ENS</button>
+          </div>
+        </div>
+        <div class="panel-body" data-view="addr">
+          <label class="field">Asset name
+            <input class="input" id="addrQuery" value="Acme Fund" placeholder="Enter asset name" autocomplete="off">
+          </label>
+          <div class="list" id="addrList"><div class="row"><span class="chain">Ethereum</span><span class="addr">0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f1</span><span class="tag">Acme Fund?</span></div><div class="row"><span class="chain">Ethereum</span><span class="addr">0xf2c84d30f9217ea4a35fce921d6f123a9b409e71</span><span class="tag">Acme Fund?</span></div><div class="row"><span class="chain">Solana</span><span class="addr">9vQeR2mBn7kTx4HcWpZs8LdJfGyA3uNiK6oPq1rSt5E</span><span class="tag">Acme Fund?</span></div><div class="row"><span class="chain">Stellar</span><span class="addr">GAQ7MZ4XK2RS5T6VPWNYZ4AB6CTDLEF5G7HJ2WACMEQRNVBKSUBXTEZY</span><span class="tag">Acme Fund?</span></div></div>
+          <div class="callout warn" id="addrWarn">Four token addresses claim to be Acme Fund. Which one did the issuer actually mint?</div>
+        </div>
+        <div class="panel-body" data-view="ens" hidden="">
+          <label class="field">ENS name
+            <input class="input" value="acmefund.lseg.com" readonly="" style="font-family:var(--font-semi-mono);color:var(--accent-text)">
+          </label>
+          <div class="row"><span class="chain">Ethereum</span><span class="addr" id="ensAddr">0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f1</span></div>
+          <div class="callout ok">1 match · published under lseg.com, the issuer's own name</div>
+        </div>
+      </div>
+    </div>
   </section>
-  <section class="slide" aria-label="LSEG domain and CSV workflow">
-    <div class="layout"><div class="copy"><h1>Creating an official onchain registry is as easy as a .csv upload.</h1><p>Add assets, include identifiers and other essential records with a .csv file</p></div>
-    <div class="panel registry-panel"><div class="panel-head"><span>Registry</span><span id="assetCount" class="pill">3 sample assets</span></div><div class="panel-body"><div class="tree"><div class="treeitem parent"><b>lseg.com</b><span>Parent name</span></div><div class="treeitem child"><b>acmefund.lseg.com</b><span>Asset name</span></div></div><div class="csvbox"><div class="csvtop"><div><div class="csvtitle">Asset records</div></div><div style="display:flex;gap:6px"><button class="action" id="loadCsv">Load sample CSV</button><button class="action secondary" id="chooseCsv">Import CSV</button></div></div><input id="csvFile" type="file" accept=".csv,text/csv" hidden><div class="asset-list" id="assetList" aria-live="polite"></div><div class="micro">CSV columns: name, ticker, ISIN, LEI, DTI, Ethereum, Solana, Stellar. Sample data is fictional. Imports stay in this browser; no ENS or vLEI verification occurs.</div></div></div></div></div>
+
+  <!-- 4 · CSV registry -->
+  <section class="slide" aria-label="Registry from a CSV">
+    <div class="wrap split">
+      <div>
+        <div class="caps kicker">Issuance</div>
+        <h1>Creating an official onchain registry is as easy as a .csv upload.</h1>
+        <p class="lede">Add assets with their identifiers and other essential records from a .csv file. Select an asset to open its profile.</p>
+      </div>
+      <div class="card panel">
+        <div class="panel-head"><span class="h3">Registry</span><span class="tag" id="assetCount">3 assets</span></div>
+        <div class="panel-body">
+          <div class="tree">
+            <div class="node"><span class="entity">lseg.com</span> parent name</div>
+            <div class="node child"><span class="entity">acmefund.lseg.com</span> asset name</div>
+          </div>
+          <div class="btns">
+            <button class="btn sm" id="loadSample">Load sample CSV</button>
+            <button class="btn sm outline" id="importBtn">Import CSV</button>
+            <input type="file" id="importFile" accept=".csv,text/csv" hidden="">
+          </div>
+          <div class="list" id="registryList">
+      <button class="asset" data-i="0">
+        <span class="mark">A</span>
+        <span class="who"><span>Acme Fund</span><small>acmefund.lseg.com · ACME</small></span>
+        <span class="tag success">Listed</span>
+      </button>
+      <button class="asset" data-i="1">
+        <span class="mark">N</span>
+        <span class="who"><span>Northstar Tokenized Treasury Fund</span><small>northstar.lseg.com · NSTB</small></span>
+        <span class="tag success">Listed</span>
+      </button>
+      <button class="asset" data-i="2">
+        <span class="mark">H</span>
+        <span class="who"><span>Harbour Green Bond</span><small>harbourgreen.lseg.com · HGBD</small></span>
+        <span class="tag success">Listed</span>
+      </button></div>
+          <p class="micro" style="margin:0">Columns: name, ticker, ens (optional), isin, lei, dti, ethereum, solana, stellar. Imports stay in this browser; nothing is written onchain and no ENS or vLEI verification happens.</p>
+        </div>
+      </div>
+    </div>
   </section>
-  <section class="slide slide--profile" aria-label="Asset profile across networks">
-    <div class="layout"><div class="copy"><h1>Each asset has its own profile that works across any chain and can include requisite information based on jurisdictions involved with transactions.</h1><p>Address across chains like Ethereum, Solana, and Stellar can sit alongside ISIN, LEI, DTI, and issuer details in an asset profile.</p></div>
-    <div class="panel"><div class="panel-head"><span>Asset profile</span><span class="pill" id="profileSource">Demo registry entry</span></div><div class="panel-body"><div class="summary"><div class="assetmark" id="assetMark">A</div><div><b id="profileName">Acme Fund</b><small id="profileSub">ACME · Equity fund</small></div></div><div class="eyelabel section-label">Token addresses</div><div class="address-list" id="profileChains"></div><div class="eyelabel section-label">Identifiers</div><div class="facts" id="profileFacts"></div></div></div></div>
+
+  <!-- 5 · profile -->
+  <section class="slide" aria-label="Asset profile">
+    <div class="wrap split">
+      <div>
+        <div class="caps kicker">Compliance</div>
+        <h1>Each asset gets its own profile across chains.</h1>
+        <p class="lede">Token addresses on Ethereum, Solana and Stellar sit next to ISIN, LEI, DTI and issuer details, with room for whatever a jurisdiction requires.</p>
+      </div>
+      <div class="card panel">
+        <div class="panel-head"><span class="h3">Asset profile</span><span class="tag">ENS records · demo entry</span></div>
+        <div class="panel-body" id="profile">
+      <div class="summary">
+        <span class="mark lg">A</span>
+        <div><h3>Acme Fund</h3><span class="entity">acmefund.lseg.com</span></div>
+      </div>
+      <div class="sect"><span class="smallcaps">Token addresses</span><span class="micro">ACME · Equity fund</span></div>
+
+    <div class="list">
+      <div class="row"><span class="chain">Ethereum</span><span class="addr">0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f1</span></div>
+      <div class="row"><span class="chain">Solana</span><span class="addr">7xKp4mQ9sVn2eRt6aBc3DgFhJkLmNwYp8qRsTuVmQ9s</span></div>
+      <div class="row"><span class="chain">Stellar</span><span class="addr">GDX4KQ2M7RS5T6V3WXJYZ4AB6CRDLEF5G7HJ2WLMQNAPKETVRUB3SXDZ</span></div>
+    </div>
+      <div class="sect"><span class="smallcaps">Identifiers</span><span class="micro">proposed record keys</span></div>
+
+    <dl class="kv">
+      <dt>isin</dt><dd>GB00BQ7X4K21</dd>
+      <dt>lei</dt><dd>213800ACMEFUND00X421</dd>
+      <dt>dti</dt><dd>4H95J0R2X</dd>
+      <dt>issuer-country</dt><dd>United Kingdom</dd>
+      <dt>ticker</dt><dd>ACME</dd>
+    </dl></div>
+      </div>
+    </div>
   </section>
-  <section class="slide" aria-label="Find an asset">
-    <div class="layout"><div class="copy"><h1>With an official registry system, asset discoverability becomes easier.</h1><p>Each asset can be searched by its name and the information about that asset can be accessed easily with a look up function.</p></div>
-    <div class="panel"><div class="panel-head"><span>Asset lookup</span></div><div class="panel-body"><div class="lookupbar"><input id="lookupInput" aria-label="LSEG asset name" value="acmefund.lseg.com" autocomplete="off"><button class="action" id="resolveBtn">Look up</button></div><div class="lookup-result" id="lookupResult"></div><div class="note">The registry name identifies the source, not asset validity.</div></div></div></div>
+
+  <!-- 6 · lookup -->
+  <section class="slide" aria-label="Lookup">
+    <div class="wrap split">
+      <div>
+        <div class="caps kicker">Discoverability</div>
+        <h1>With an official registry, assets become easier to discover.</h1>
+        <p class="lede">Anyone can look an asset up by its name and get its addresses and identifiers back.</p>
+      </div>
+      <div class="card panel">
+        <div class="panel-head"><span class="h3">Asset lookup</span></div>
+        <div class="panel-body">
+          <form class="lookupbar" id="lookupForm">
+            <input class="input" id="lookupInput" aria-label="ENS name" value="acmefund.lseg.com" autocomplete="off" spellcheck="false">
+            <button class="btn">Look up</button>
+          </form>
+          <div id="lookupResult">
+      <div style="display:grid;gap:14px">
+        <div class="summary">
+          <span class="mark">A</span>
+          <div style="flex:1;min-width:0"><div>Acme Fund</div><span class="micro">Published under lseg.com</span></div>
+          <span class="tag success">Listed in demo</span>
+        </div>
+        <div class="sect"><span class="smallcaps">Token addresses</span></div>
+
+    <div class="list">
+      <div class="row"><span class="chain">Ethereum</span><span class="addr">0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f1</span></div>
+      <div class="row"><span class="chain">Solana</span><span class="addr">7xKp4mQ9sVn2eRt6aBc3DgFhJkLmNwYp8qRsTuVmQ9s</span></div>
+      <div class="row"><span class="chain">Stellar</span><span class="addr">GDX4KQ2M7RS5T6V3WXJYZ4AB6CRDLEF5G7HJ2WLMQNAPKETVRUB3SXDZ</span></div>
+    </div>
+        <div class="sect"><span class="smallcaps">Identifiers</span></div>
+
+    <dl class="kv">
+      <dt>isin</dt><dd>GB00BQ7X4K21</dd>
+      <dt>lei</dt><dd>213800ACMEFUND00X421</dd>
+      <dt>dti</dt><dd>4H95J0R2X</dd>
+      <dt>issuer-country</dt><dd>United Kingdom</dd>
+      <dt>ticker</dt><dd>ACME</dd>
+    </dl>
+      </div></div>
+          <p class="micro" style="margin:0">The name identifies who published the listing, not whether the asset is sound.</p>
+        </div>
+      </div>
+    </div>
   </section>
-  <section class="slide" aria-label="Discovery in apps that integrate ENS">
-    <div class="layout"><div class="copy"><h1>Integrated platforms can show new assets automatically.</h1><p>Platforms that read the name registry can include new listings, making distribution and discovery seamless.</p></div>
-    <div class="panel"><div class="panel-head"><span>Token picker</span></div><div class="panel-body"><div class="picker"><div class="picker-top"><b>Choose an asset</b><span class="eyelabel">Ethereum</span></div><div style="padding:0 13px 10px"><input class="searchinput" id="pickerSearch" aria-label="Search tokens" placeholder="Search token or issuer"></div><div id="pickerList"></div></div><button class="action secondary" id="addNewAsset" style="margin-top:12px">＋ Add sample RWA</button></div></div></div>
+
+  <!-- 7 · token picker -->
+  <section class="slide" aria-label="Token picker">
+    <div class="wrap split">
+      <div>
+        <div class="caps kicker">Distribution</div>
+        <h1>Integrated platforms can show new assets automatically.</h1>
+        <p class="lede">Wallets and platforms that read the registry pick up new listings as they are named, so distribution and discovery need no extra integration work.</p>
+      </div>
+      <div class="card panel">
+        <div class="panel-head"><span class="h3">Choose an asset</span><span class="tag">Ethereum</span></div>
+        <div class="panel-body">
+          <input class="input" id="pickerSearch" placeholder="Search token, issuer or name" aria-label="Search tokens" autocomplete="off">
+          <div class="list" id="pickerList">
+      <button class="asset" data-ens="acmefund.lseg.com">
+        <span class="mark">A</span>
+        <span class="who"><span>Acme Fund</span><small>acmefund.lseg.com · 0x83a1d94f…</small></span>
+        <span class="tag">ACME</span>
+      </button>
+      <button class="asset" data-ens="northstar.lseg.com">
+        <span class="mark">N</span>
+        <span class="who"><span>Northstar Tokenized Treasury Fund</span><small>northstar.lseg.com · 0x29ce98a4…</small></span>
+        <span class="tag">NSTB</span>
+      </button>
+      <button class="asset" data-ens="harbourgreen.lseg.com">
+        <span class="mark">H</span>
+        <span class="who"><span>Harbour Green Bond</span><small>harbourgreen.lseg.com · 0xa14b709c…</small></span>
+        <span class="tag">HGBD</span>
+      </button></div>
+          <button class="btn outline sm" id="addRwa" style="justify-self:start">+ Issue a new sample asset</button>
+        </div>
+      </div>
+    </div>
   </section>
+
+  <!-- 8 · close -->
+  <section class="slide" aria-label="Next steps">
+    <div class="wrap split" style="align-items:start">
+      <div>
+        <div class="caps kicker">To work through together</div>
+        <h1>Open questions</h1>
+        <p class="lede">A concept by ENS Labs for London Stock Exchange Group, based on the demo by Jason. It is not an LSEG product.</p>
+      </div>
+      <div style="display:grid;gap:16px">
+        <ol class="qs">
+          <li class="card">Which parent name: <span class="entity">lseg.com</span> imported with DNSSEC, or an <span class="entity">lseg.eth</span> name?</li>
+          <li class="card">Which pilot issuers go first?</li>
+          <li class="card">Can issuers edit their own asset records, or only LSEG?</li>
+          <li class="card">How should DTIs and ENS profiles reference each other?</li>
+        </ol>
+        <p class="micro" style="margin:0">All issuers, ISINs, LEIs, DTIs and addresses in this demo are fictional. The isin, lei, dti and issuer-country record keys are proposals, not ENS standards.</p>
+      </div>
+    </div>
+  </section>
+
 </main>
-<footer class="nav"><button class="prev" id="prev" aria-label="Previous page">← Back</button><div class="navcenter"><div class="progress" id="progress" aria-label="Page navigation"></div><span class="counter" id="counter">01 / 07</span></div><button class="next" id="next" aria-label="Next page">Next →</button></footer>
+
+<nav class="nav" aria-label="Slides">
+  <button class="btn outline sm" id="prev" aria-label="Previous slide" disabled="">← <span class="lbl">Back</span></button>
+  <span class="credit">Concept by ENS Labs · based on the demo by Jason</span>
+  <div class="dots" id="dots"></div>
+  <span class="count" id="count">01 / 08</span>
+  <button class="btn sm" id="next" aria-label="Next slide"><span class="lbl">Next</span> →</button>
+</nav>
+
 <script>
-const demoAssets=[
- {name:'Acme Fund',short:'Acme Fund',ticker:'ACME',type:'Equity fund',ens:'acmefund.lseg.com',isin:'GB00BQ7X4K21',lei:'213800ACMEFUND00X421',dti:'4H95J0R2X',country:'United Kingdom',addresses:{Ethereum:'0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f',Solana:'7xKp4mQ9sVn2eRt6aBc3DgFhJkLmNwYp8qRsTuVmQ9s',Stellar:'GDX4KQ2M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W2LM'}},
- {name:'Northstar Tokenized Treasury Fund',short:'Northstar Treasury',ticker:'NSTB',type:'Treasury fund',ens:'northstar.lseg.com',isin:'GB00NSTB00001',lei:'213800NORTHSTAR00001',dti:'4H95J0R2Y',country:'United Kingdom',addresses:{Ethereum:'0x29ce98a4f0c7d30b6ad279efa11c0274bb5a1820',Solana:'8nTs6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ1a',Stellar:'GNS2KQ4M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W7PQ'}},
- {name:'Harbour Green Bond',short:'Harbour Green Bond',ticker:'HGBD',type:'Green bond',ens:'harbourgreen.lseg.com',isin:'GB00HGBD00002',lei:'213800HARBOUR000002',dti:'4H95J0R2Z',country:'United Kingdom',addresses:{Ethereum:'0xa14b709cb8354d6e1298f043e62c7a915b63c8d2',Solana:'4mHg6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ2b',Stellar:'GHB2KQ4M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W8RT'}}
-];
-const addedAssets=[];let selectedAsset=demoAssets[0],page=0,csvLoaded=false;
-const allAssets=()=>[...demoAssets,...addedAssets];
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function addressRows(asset){return ['Ethereum','Solana','Stellar'].map(chain=>`<div class="address-row"><strong>${chain}</strong><code>${esc(asset.addresses[chain]||'Not listed')}</code></div>`).join('')}
-function factRows(asset,includeName=false){const facts=[['ISIN',asset.isin],['LEI',asset.lei],['DTI',asset.dti],['Issuer country',asset.country],['Ticker',asset.ticker]];if(includeName)facts.push(['Name',asset.ens]);return facts.map(([k,v])=>`<div class="fact"><span>${esc(k)}</span><b>${esc(v||'—')}</b></div>`).join('')}
-function renderProfile(){document.getElementById('assetMark').textContent=selectedAsset.ticker.slice(0,1);document.getElementById('profileName').textContent=selectedAsset.name;document.getElementById('profileSub').textContent=`${selectedAsset.ticker} · ${selectedAsset.type}`;document.getElementById('profileChains').innerHTML=addressRows(selectedAsset);document.getElementById('profileFacts').innerHTML=factRows(selectedAsset,true)}
-function renderAssetList(){const list=document.getElementById('assetList');list.innerHTML=allAssets().map((a,i)=>`<div class="asset-item"><button data-asset-index="${i}"><b>${esc(a.name)}</b><small>${esc(a.ens)} · ${esc(a.ticker)}</small></button><span class="pill">Listed</span></div>`).join('');list.querySelectorAll('[data-asset-index]').forEach(b=>b.onclick=()=>{selectedAsset=allAssets()[Number(b.dataset.assetIndex)];renderProfile();go(4)});document.getElementById('assetCount').textContent=`${allAssets().length} ${allAssets().length===1?'asset':'assets'}`}
-function renderLookup(){const name=document.getElementById('lookupInput').value.trim().toLowerCase();const asset=allAssets().find(a=>a.ens.toLowerCase()===name);const box=document.getElementById('lookupResult');if(!asset){box.innerHTML=`<div class="result-content"><b>No demo listing found for “${esc(name||'') }”.</b><div class="subline">Try a name shown in the registry, such as acmefund.lseg.com.</div></div>`;return}box.innerHTML=`<div class="result-head"><div class="result-identity"><b>${esc(asset.name)}</b><small>${esc(asset.ens)} · Demo registry listing</small></div><span class="verification" aria-label="Listed in demo registry">Listed in demo</span></div><div class="result-content"><div class="eyelabel section-label">Token addresses</div><div class="address-list">${addressRows(asset)}</div><div class="eyelabel section-label">Identifiers</div><div class="facts">${factRows(asset)}</div></div>`}
-function renderPicker(){const q=document.getElementById('pickerSearch').value.trim().toLowerCase();const assets=allAssets().filter(a=>`${a.name} ${a.ticker} ${a.ens}`.toLowerCase().includes(q));const list=document.getElementById('pickerList');list.innerHTML=assets.length?assets.map(a=>`<button class="picker-row" data-name="${esc(a.ens)}"><span class="token-icon">${esc(a.ticker.slice(0,1))}</span><span><strong>${esc(a.name)}</strong><small>${esc(a.ens)} · ${esc(a.addresses.Ethereum.slice(0,10))}…</small></span><span class="source-tag">Demo</span></button>`).join(''):`<div class="micro" style="padding:14px">No matching assets in this demo.</div>`;list.querySelectorAll('.picker-row').forEach(b=>b.onclick=()=>{list.querySelectorAll('.picker-row').forEach(row=>row.classList.remove('selected'));b.classList.add('selected')})}
-function parseCsv(text){const rows=[];let row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const ch=text[i];if(quoted){if(ch==='"'&&text[i+1]==='"'){field+='"';i++}else if(ch==='"')quoted=false;else field+=ch}else if(ch==='"')quoted=true;else if(ch===','){row.push(field);field=''}else if(ch==='\n'){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()))rows.push(row);row=[];field=''}else field+=ch}if(field||row.length){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()))rows.push(row)}if(rows.length<2)return[];const headers=rows[0].map(h=>h.trim().toLowerCase().replace(/[^a-z0-9]+/g,'_'));return rows.slice(1).map(cells=>{const d=Object.fromEntries(headers.map((h,i)=>[h,(cells[i]||'').trim()]));const get=(...keys)=>keys.map(k=>d[k]).find(Boolean)||'';const name=get('name','asset_name','asset');const ens=get('ens','ens_name','name_ens')||`${name.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,24)}.lseg.com`;if(!name)return null;return{name,short:get('short_name')||name,ticker:get('ticker','symbol')||'RWA',type:get('type','asset_type','asset_class')||'Tokenized asset',ens,isin:get('isin'),lei:get('lei'),dti:get('dti'),country:get('country','issuer_country'),addresses:{Ethereum:get('ethereum','ethereum_address','eth_address'),Solana:get('solana','solana_address'),Stellar:get('stellar','stellar_address')}}}).filter(Boolean)}
-function addAssets(assets){let added=0;assets.forEach(a=>{if(a.ens&&!allAssets().some(x=>x.ens.toLowerCase()===a.ens.toLowerCase())){addedAssets.push(a);added++}});renderAssetList();renderPicker();return added}
-const slides=[...document.querySelectorAll('.slide')];
-function go(n){page=Math.max(0,Math.min(slides.length-1,n));document.body.classList.toggle('on-cover',page===0);slides.forEach((s,i)=>s.classList.toggle('active',i===page));document.querySelectorAll('.progress button').forEach((b,i)=>{b.classList.toggle('active',i===page);b.setAttribute('aria-current',i===page?'step':'false')});document.getElementById('counter').textContent=`${String(page+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;document.getElementById('prev').disabled=page===0;document.getElementById('next').disabled=page===slides.length-1;slides[page].scrollTop=0}
-const problemTab=document.getElementById('problemTab'),ensTab=document.getElementById('ensTab');function showCompare(useEns){problemTab.classList.toggle('active',!useEns);ensTab.classList.toggle('active',useEns);problemTab.setAttribute('aria-selected',String(!useEns));ensTab.setAttribute('aria-selected',String(useEns));document.getElementById('problemView').hidden=useEns;document.getElementById('ensView').hidden=!useEns}problemTab.onclick=()=>showCompare(false);ensTab.onclick=()=>showCompare(true);document.getElementById('tickerSearch').addEventListener('input',e=>{const found=e.target.value.trim().toLowerCase()==='acme fund';document.querySelectorAll('.candidate').forEach(row=>row.hidden=!found);let empty=document.getElementById('noTickerMatch');if(!found&&!empty){empty=document.createElement('div');empty.id='noTickerMatch';empty.className='subline';empty.textContent='No matching asset in this demo.';document.querySelector('.candidate-list').after(empty)}if(found&&empty)empty.remove()});
-const progress=document.getElementById('progress');for(let i=0;i<slides.length;i++){const b=document.createElement('button');b.setAttribute('aria-label',`Go to page ${i+1}`);b.onclick=()=>go(i);progress.append(b)}
-document.getElementById('prev').onclick=()=>go(page-1);document.getElementById('next').onclick=()=>go(page+1);
-document.getElementById('resolveBtn').onclick=renderLookup;document.getElementById('lookupInput').addEventListener('keydown',e=>{if(e.key==='Enter')renderLookup()});
-document.getElementById('loadCsv').onclick=()=>{if(csvLoaded)return;const samples=[{name:'Meridian Renewables Fund',short:'Meridian Renewables',ticker:'MRDF',type:'Renewables fund',ens:'meridian.lseg.com',isin:'GB00MRDF00003',lei:'213800MERIDIAN00003',dti:'4H95J0R3A',country:'United Kingdom',addresses:{Ethereum:'0xd248a7e99b635cc271c301c65546ab0d952bd90e',Solana:'2mHg6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ4d',Stellar:'GMR2KQ4M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W1XY'}},{name:'Crown Sterling Note',short:'Crown Sterling',ticker:'CRST',type:'Sovereign note',ens:'crownsterling.lseg.com',isin:'GB00CRST00004',lei:'213800CROWNSTERLING04',dti:'4H95J0R3B',country:'United Kingdom',addresses:{Ethereum:'0x13a2b7d8e9f0c1a436589bdde0213fc4a7b69012',Solana:'3cHg6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ5e',Stellar:'GCS2KQ4M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W2YZ'}}];addAssets(samples);csvLoaded=true;document.getElementById('loadCsv').textContent='✓ Sample CSV loaded'};
-document.getElementById('chooseCsv').onclick=()=>document.getElementById('csvFile').click();
-document.getElementById('csvFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const count=addAssets(parseCsv(await file.text()));document.getElementById('loadCsv').textContent=count?`Loaded ${count} asset${count===1?'':'s'}`:'No new assets';}catch{document.getElementById('loadCsv').textContent='Could not read CSV'}e.target.value=''});
-document.getElementById('pickerSearch').addEventListener('input',renderPicker);
-document.getElementById('addNewAsset').onclick=()=>{if(!addedAssets.some(a=>a.ens==='newissue.lseg.com')){addAssets([{name:'New LSEG Infrastructure Bond',short:'Infrastructure Bond',ticker:'LIFB',type:'Infrastructure bond',ens:'newissue.lseg.com',isin:'GB00NEWISSUE01',lei:'213800NEWISSUE00001',dti:'4H95J0R2N',country:'United Kingdom',addresses:{Ethereum:'0x5c13eaf98a1a3340e165fbc841dfa684d972b0a9',Solana:'5fNe2pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ3c',Stellar:'GNI2KQ4M7R8S5T6V3W9X1Y2Z4A6B8C0D1E3F5G7H9J2W9UV'}}]);document.getElementById('addNewAsset').textContent='✓ New RWA added to registry';document.getElementById('pickerSearch').value='new';renderPicker()}else{document.getElementById('pickerSearch').value='new';renderPicker()}};
-// Start with the three fictional example assets visible in the registry.
-renderAssetList();renderProfile();renderLookup();renderPicker();go(0);
-document.addEventListener('keydown',e=>{if(e.target.matches('input'))return;if(e.key==='ArrowRight')go(page+1);if(e.key==='ArrowLeft')go(page-1)});
+(() => {
+  // All fictional.
+  const assets = [
+    { name: "Acme Fund", ticker: "ACME", type: "Equity fund", ens: "acmefund.lseg.com",
+      isin: "GB00BQ7X4K21", lei: "213800ACMEFUND00X421", dti: "4H95J0R2X", country: "United Kingdom",
+      eth: "0x83a1d94f82b67170c1e39ad5f09bb7d20b6c42f1",
+      sol: "7xKp4mQ9sVn2eRt6aBc3DgFhJkLmNwYp8qRsTuVmQ9s",
+      xlm: "GDX4KQ2M7RS5T6V3WXJYZ4AB6CRDLEF5G7HJ2WLMQNAPKETVRUB3SXDZ" },
+    { name: "Northstar Tokenized Treasury Fund", ticker: "NSTB", type: "Treasury fund", ens: "northstar.lseg.com",
+      isin: "GB00NSTB0001", lei: "213800NORTHSTAR00001", dti: "4H95J0R2Y", country: "United Kingdom",
+      eth: "0x29ce98a4f0c7d30b6ad279efa11c0274bb5a1820",
+      sol: "8nTs6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ1a",
+      xlm: "GNS2KQ4M7RS5T6VEWXHYZ4AB6CQDLEF5G7HJ2W7PQTRNVAKSUBXMEQZD" },
+    { name: "Harbour Green Bond", ticker: "HGBD", type: "Green bond", ens: "harbourgreen.lseg.com",
+      isin: "GB00HGBD0002", lei: "213800HARBOUR0000002", dti: "4H95J0R2Z", country: "United Kingdom",
+      eth: "0xa14b709cb8354d6e1298f043e62c7a915b63c8d2",
+      sol: "4mHg6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ2b",
+      xlm: "GHB2KQ4M7RS5T6VRWXGYZ4AB6CHDLEF5G7HJ2W6RTQPMVANSUBYKETZC" },
+  ];
+  const SAMPLE_CSV = `name,ticker,type,ens,isin,lei,dti,ethereum,solana,stellar
+Meridian Renewables Fund,MRDF,Renewables fund,meridian.lseg.com,GB00MRDF0003,213800MERIDIAN000003,4H95J0R3A,0xd248a7e99b635cc271c301c65546ab0d952bd90e,2mHg6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ4d,GMR2KQ4M7RS5T6VAWXEYZ4AB6CMDLEF5G7HJ2W3XYPRKVNASUBTQEJZF
+Crown Sterling Note,CRST,Sovereign note,crownsterling.lseg.com,GB00CRST0004,213800CROWNSTERLNG04,4H95J0R3B,0x13a2b7d8e9f0c1a436589bdde0213fc4a7b69012,3cHg6pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ5e,GCS2KQ4M7RS5T6VNWXFYZ4AB6CRDLEF5G7HJ2W2YZMQPVKTSUBANEHZG`;
+  const NEW_ASSET = { name: "Kestrel Infrastructure Bond", ticker: "KIFB", type: "Infrastructure bond", ens: "kestrel.lseg.com",
+    isin: "GB00KIFB0005", lei: "213800KESTREL0000005", dti: "4H95J0R2N", country: "United Kingdom",
+    eth: "0x5c13eaf98a1a3340e165fbc841dfa684d972b0a9",
+    sol: "5fNe2pR1xWm3vBu7cDe5FgHiJkLmNwYp2qRsTuVmQ3c",
+    xlm: "GKI2KQ4M7RS5T6VBWXDYZ4AB6CKDLEF5G7HJ2W5UVNRQVTASUBMPEKZH" };
+  // Lookalikes for "Using an address": one real, three that also call themselves Acme Fund.
+  const ACME_CANDIDATES = [
+    ["Ethereum", assets[0].eth],
+    ["Ethereum", "0xf2c84d30f9217ea4a35fce921d6f123a9b409e71"],
+    ["Solana", "9vQeR2mBn7kTx4HcWpZs8LdJfGyA3uNiK6oPq1rSt5E"],
+    ["Stellar", "GAQ7MZ4XK2RS5T6VPWNYZ4AB6CTDLEF5G7HJ2WACMEQRNVBKSUBXTEZY"],
+  ];
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const initial = a => esc((a.ticker || a.name || "?").charAt(0).toUpperCase());
+
+  /* ---------- navigation ---------- */
+  const slides = [...document.querySelectorAll(".slide")];
+  const dots = $("#dots");
+  let cur = 0;
+  slides.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.setAttribute("aria-label", `Go to slide ${i + 1}`);
+    b.onclick = () => go(i);
+    dots.appendChild(b);
+  });
+  function go(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, j) => s.classList.toggle("active", j === cur));
+    [...dots.children].forEach((d, j) => d.setAttribute("aria-current", j === cur));
+    $("#count").textContent = `${String(cur + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+    $("#prev").disabled = cur === 0;
+    $("#next").disabled = cur === slides.length - 1;
+    document.body.classList.toggle("on-cover", cur === 0);
+    history.replaceState(null, "", `#${cur + 1}`);
+  }
+  $("#prev").onclick = () => go(cur - 1);
+  $("#next").onclick = () => go(cur + 1);
+  document.addEventListener("keydown", e => {
+    if (e.target.closest("input, textarea")) return;
+    if (e.key === "ArrowRight" || e.key === "PageDown") go(cur + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") go(cur - 1);
+  });
+  let tx = null;
+  $("#deck").addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
+  $("#deck").addEventListener("touchend", e => {
+    if (tx === null || e.target.closest("input, .list, .tabs")) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 60) go(cur + (dx < 0 ? 1 : -1));
+  });
+
+  /* ---------- slide 3: address vs name ---------- */
+  document.querySelectorAll("[data-tab]").forEach(t => t.onclick = () => {
+    document.querySelectorAll("[data-tab]").forEach(x => x.setAttribute("aria-selected", x === t));
+    document.querySelectorAll("[data-view]").forEach(v => v.hidden = v.dataset.view !== t.dataset.tab);
+  });
+  $("#ensAddr").textContent = assets[0].eth;
+  function renderCandidates() {
+    const hit = $("#addrQuery").value.trim().toLowerCase() === "acme fund";
+    $("#addrList").innerHTML = hit
+      ? ACME_CANDIDATES.map(([c, a]) => `<div class="row"><span class="chain">${c}</span><span class="addr">${a}</span><span class="tag">Acme Fund?</span></div>`).join("")
+      : `<div class="empty">No matching asset in this demo. Try “Acme Fund”.</div>`;
+    $("#addrWarn").hidden = !hit;
+  }
+  $("#addrQuery").addEventListener("input", renderCandidates);
+
+  /* ---------- registry, profile, lookup, picker ---------- */
+  let selected = assets[0];
+  let picked = null;
+  let fresh = null;
+
+  function renderRegistry() {
+    $("#assetCount").textContent = `${assets.length} assets`;
+    $("#registryList").innerHTML = assets.map((a, i) => `
+      <button class="asset${a === fresh ? " new" : ""}" data-i="${i}">
+        <span class="mark">${initial(a)}</span>
+        <span class="who"><span>${esc(a.name)}</span><small>${esc(a.ens)} · ${esc(a.ticker)}</small></span>
+        <span class="tag success">Listed</span>
+      </button>`).join("");
+  }
+  $("#registryList").addEventListener("click", e => {
+    const b = e.target.closest(".asset"); if (!b) return;
+    selected = assets[+b.dataset.i];
+    renderProfile();
+    go(4);
+  });
+
+  const addrRows = a => `
+    <div class="list">
+      <div class="row"><span class="chain">Ethereum</span><span class="addr">${esc(a.eth) || "—"}</span></div>
+      <div class="row"><span class="chain">Solana</span><span class="addr">${esc(a.sol) || "—"}</span></div>
+      <div class="row"><span class="chain">Stellar</span><span class="addr">${esc(a.xlm) || "—"}</span></div>
+    </div>`;
+  const idRows = a => `
+    <dl class="kv">
+      <dt>isin</dt><dd>${esc(a.isin) || "—"}</dd>
+      <dt>lei</dt><dd>${esc(a.lei) || "—"}</dd>
+      <dt>dti</dt><dd>${esc(a.dti) || "—"}</dd>
+      <dt>issuer-country</dt><dd>${esc(a.country) || "—"}</dd>
+      <dt>ticker</dt><dd>${esc(a.ticker)}</dd>
+    </dl>`;
+
+  function renderProfile() {
+    const a = selected;
+    $("#profile").innerHTML = `
+      <div class="summary">
+        <span class="mark lg">${initial(a)}</span>
+        <div><h3>${esc(a.name)}</h3><span class="entity">${esc(a.ens)}</span></div>
+      </div>
+      <div class="sect"><span class="smallcaps">Token addresses</span><span class="micro">${esc(a.ticker)} · ${esc(a.type)}</span></div>
+      ${addrRows(a)}
+      <div class="sect"><span class="smallcaps">Identifiers</span><span class="micro">proposed record keys</span></div>
+      ${idRows(a)}`;
+  }
+
+  function lookup() {
+    const q = $("#lookupInput").value.trim().toLowerCase();
+    const a = assets.find(x => x.ens === q);
+    $("#lookupResult").innerHTML = a ? `
+      <div style="display:grid;gap:14px">
+        <div class="summary">
+          <span class="mark">${initial(a)}</span>
+          <div style="flex:1;min-width:0"><div>${esc(a.name)}</div><span class="micro">Published under lseg.com</span></div>
+          <span class="tag success">Listed in demo</span>
+        </div>
+        <div class="sect"><span class="smallcaps">Token addresses</span></div>
+        ${addrRows(a)}
+        <div class="sect"><span class="smallcaps">Identifiers</span></div>
+        ${idRows(a)}
+      </div>` : `
+      <div class="empty">No demo listing for “${esc(q)}”.<br>Try a name from the registry, such as <span class="entity">acmefund.lseg.com</span>.</div>`;
+  }
+  $("#lookupForm").addEventListener("submit", e => { e.preventDefault(); lookup(); });
+
+  function renderPicker() {
+    const q = $("#pickerSearch").value.trim().toLowerCase();
+    const list = assets.filter(a => !q || [a.name, a.ticker, a.ens].some(v => v.toLowerCase().includes(q)));
+    $("#pickerList").innerHTML = list.length ? list.map(a => `
+      <button class="asset${a === picked ? " picked" : ""}${a === fresh ? " new" : ""}" data-ens="${esc(a.ens)}">
+        <span class="mark">${initial(a)}</span>
+        <span class="who"><span>${esc(a.name)}</span><small>${esc(a.ens)} · ${esc((a.eth || "").slice(0, 10))}…</small></span>
+        <span class="tag">${esc(a.ticker)}</span>
+      </button>`).join("") : `<div class="empty">No matching assets in this demo.</div>`;
+  }
+  $("#pickerSearch").addEventListener("input", renderPicker);
+  $("#pickerList").addEventListener("click", e => {
+    const b = e.target.closest(".asset"); if (!b) return;
+    picked = assets.find(a => a.ens === b.dataset.ens);
+    renderPicker();
+  });
+
+  function renderAll() { renderRegistry(); renderProfile(); renderPicker(); }
+
+  function add(rows) {
+    let n = 0;
+    for (const a of rows) {
+      if (!a.name || assets.some(x => x.ens === a.ens)) continue;
+      assets.push(a); fresh = a; n++;
+    }
+    renderAll();
+    return n;
+  }
+  $("#addRwa").onclick = () => {
+    add([NEW_ASSET]);
+    $("#addRwa").textContent = "✓ New asset named and listed";
+    $("#addRwa").disabled = true;
+    $("#pickerSearch").value = "kestrel";
+    renderPicker();
+  };
+
+  /* ---------- CSV ---------- */
+  function parseCSV(text) {
+    const rows = []; let row = [], f = "", q = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true;
+      else if (c === ",") { row.push(f); f = ""; }
+      else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+      else f += c;
+    }
+    if (f || row.length) { row.push(f); rows.push(row); }
+    const nonEmpty = rows.filter(r => r.some(v => v.trim()));
+    if (nonEmpty.length < 2) return [];
+    const head = nonEmpty[0].map(h => h.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_"));
+    const pick = (o, ...keys) => { for (const k of keys) if (o[k]) return o[k].trim(); return ""; };
+    return nonEmpty.slice(1).map(r => {
+      const o = {}; head.forEach((h, i) => o[h] = r[i] || "");
+      const name = pick(o, "name", "asset_name", "asset");
+      const label = name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 24);
+      return {
+        name, ticker: (pick(o, "ticker") || "RWA").toUpperCase(), type: pick(o, "type") || "Tokenized asset",
+        ens: (pick(o, "ens", "ens_name") || (label && `${label}.lseg.com`)).toLowerCase(),
+        isin: pick(o, "isin"), lei: pick(o, "lei"), dti: pick(o, "dti"),
+        country: pick(o, "issuer_country", "country") || "United Kingdom",
+        eth: pick(o, "ethereum", "ethereum_address", "eth_address"),
+        sol: pick(o, "solana", "solana_address"),
+        xlm: pick(o, "stellar", "stellar_address"),
+      };
+    });
+  }
+  $("#loadSample").onclick = () => {
+    add(parseCSV(SAMPLE_CSV));
+    $("#loadSample").textContent = "✓ Sample CSV loaded";
+    $("#loadSample").disabled = true;
+  };
+  $("#importBtn").onclick = () => $("#importFile").click();
+  $("#importFile").onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    const btn = $("#importBtn");
+    try {
+      const n = add(parseCSV(await file.text()));
+      btn.textContent = n ? `Loaded ${n} asset${n === 1 ? "" : "s"}` : "No new assets";
+    } catch { btn.textContent = "Could not read CSV"; }
+    e.target.value = "";
+  };
+
+  renderCandidates(); renderAll(); lookup();
+  go(Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+})();
 </script>
-</body>
-</html>
+
+
+
+</body></html>
